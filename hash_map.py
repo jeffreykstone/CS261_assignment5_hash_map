@@ -1,6 +1,6 @@
 # Course: CS261 - Data Structures
-# Assignment: 5
-# Student:
+# Assignment: 5.1 hash_map
+# Student: Jeff Stone - 934256195
 # Description:
 
 
@@ -56,59 +56,183 @@ class HashMap:
             out += str(i) + ': ' + str(list) + '\n'
         return out
 
+
     def clear(self) -> None:
         """
-        TODO: Write this implementation
+        This method clears the content of the hash map without changing the underlying
+        hash table capacity.
+        :return: returns and empty hash map
         """
-        pass
+        for index in range(self.capacity):
+            for node in self.buckets.get_at_index(index):
+                self.buckets.get_at_index(index).remove(node.key)
+                self.size -= 1
+
+        return
+
 
     def get(self, key: str) -> object:
         """
-        TODO: Write this implementation
+        This method returns the value associated with the given key.
+        If the key is not in the hash map, the method returns None.
+        :param key: the key to get
+        :return: the value object associated with the key or None if empty
         """
+        hash = self.hash_function(key)
+        index = hash % self.capacity
+        list = self.buckets.get_at_index(index)
+
+        if list.contains(key):
+            for node in list:
+                if node.key == key:
+                    return node.value
+
         return None
+
 
     def put(self, key: str, value: object) -> None:
         """
-        TODO: Write this implementation
+        This method updates the key:value pair in the hash map.
+        If a given key already exists in the hash map, its associated
+        value is replaced with the new value.
+        If a given key is not in the hash map, a key:value pair is added.
+        :param: the key where the value is to be inserted
+        :param key:
+        :param value:
+        :return:
         """
-        pass
+        hash = self.hash_function(key)
+        index = hash % self.capacity
+
+        if self.contains_key(key):
+            for node in self.buckets.get_at_index(index):
+                if node.key is key:
+                    node.value = value
+        else:
+            self.buckets.get_at_index(index).insert(key, value)
+            self.size += 1
+
 
     def remove(self, key: str) -> None:
         """
-        TODO: Write this implementation
+        This method removes the given key and its associated value from the hash map.
+        If a given key is not in the hash map, the method does nothing.
+        :param key: key to be removed from hash map
         """
-        pass
+        hash = self.hash_function(key)
+        index = hash % self.capacity
+
+        # if hash map contains the key find node and remove it
+        if self.contains_key(key):
+            for node in self.buckets.get_at_index(index):
+                if node.key == key:
+                    self.buckets.get_at_index(index).remove(node.key)
+
+            self.size -= 1
+
+        return
+
 
     def contains_key(self, key: str) -> bool:
         """
-        TODO: Write this implementation
+        This method returns True if the given key is in the hash map, otherwise it returns False.
+        An empty hash map does not contain any keys.
+        :param key: key to find
+        :return: returns True if the key is in the hash map, otherwise returns False
         """
+        hash = self.hash_function(key)
+        index = hash % self.capacity
+        list = self.buckets.get_at_index(index) #get a singly linked list
+
+        if list.contains(key) is not None:
+            return True
+
         return False
 
     def empty_buckets(self) -> int:
         """
-        TODO: Write this implementation
+        This method determines the number of empty buckets in the hash map.
+        :return: returns the number of empty buckets in the hash map
         """
-        return 0
+        empty = 0
+
+        for index in range (self.capacity):
+            if self.buckets.get_at_index(index).length == 0:
+                empty += 1
+
+        return empty
 
     def table_load(self) -> float:
         """
-        TODO: Write this implementation
+        This method returns the current hash table load factor
+        (determines the overall hash map usage)
+        :return float: overall hash map usage
         """
-        return 0.0
+        hash_use = 0
+
+        for index in range(self.capacity):
+            list = self.buckets.get_at_index(index)
+
+            hash_use += list.length()
+
+        return hash_use / self.capacity
 
     def resize_table(self, new_capacity: int) -> None:
         """
-        TODO: Write this implementation
+        This method changes the capacity of the internal hash table.
+        All existing key:value pairs remain in the new hash map
+        and all hash table links are rehashed.
+        If new_capacity is less than 1, the method does nothing.
+        :param new_capacity: new capacity of the internal hash table
         """
-        pass
+        if new_capacity < 1:
+
+            return
+
+        new_hashmap = DynamicArray()
+
+        # generate the new hash map
+        for i in range(new_capacity):
+            new_hashmap.append(LinkedList())
+
+        for index in range(self.capacity):
+            list = self.buckets.get_at_index(index) # get the singly linked list
+
+            if list.length() == 0:
+                continue
+
+            for node in list:
+                # generate new hash
+                hash = self.hash_function(node.key)
+                index = hash % new_capacity
+                #insert in new hash map
+                new_hashmap.get_at_index(index).insert(node.key, node.value)
+
+        # replace old values with new
+        self.buckets = new_hashmap
+        self.capacity = new_capacity
+
+        del new_hashmap
+
+        return
 
     def get_keys(self) -> DynamicArray:
         """
-        TODO: Write this implementation
+        This method returns a DynamicArray that contains all keys stored in your hash map.
+        The order of the keys in the DA does not matter.
+        :return DynamicArray: returns an array of keys in the hash map
         """
-        return DynamicArray()
+        DA = DynamicArray()
+        for index in range (self.capacity):
+            list = self.buckets.get_at_index(index)
+
+            if list.length() == 0:
+                continue
+
+            for node in list:
+                DA.append(node.key)
+
+        return DA
 
 
 # BASIC TESTING
