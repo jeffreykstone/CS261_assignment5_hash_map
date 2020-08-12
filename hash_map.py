@@ -152,12 +152,12 @@ class HashMap:
     def empty_buckets(self) -> int:
         """
         This method determines the number of empty buckets in the hash map.
-        :return: returns the number of empty buckets in the hash map
+        :return int: returns the number of empty buckets in the hash map
         """
         empty = 0
 
-        for index in range (self.capacity):
-            if self.buckets.get_at_index(index).length == 0:
+        for index in range(self.capacity):
+            if self.buckets.get_at_index(index).length() == 0:
                 empty += 1
 
         return empty
