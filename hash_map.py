@@ -61,7 +61,6 @@ class HashMap:
         """
         This method clears the content of the hash map without changing the underlying
         hash table capacity.
-        :return: returns and empty hash map
         """
         for index in range(self.capacity):
             for node in self.buckets.get_at_index(index):
@@ -97,9 +96,8 @@ class HashMap:
         value is replaced with the new value.
         If a given key is not in the hash map, a key:value pair is added.
         :param: the key where the value is to be inserted
-        :param key:
-        :param value:
-        :return:
+        :param key: key for inserting the value
+        :param value: the value to be inserted
         """
         hash = self.hash_function(key)
         index = hash % self.capacity
@@ -183,7 +181,7 @@ class HashMap:
         All existing key:value pairs remain in the new hash map
         and all hash table links are rehashed.
         If new_capacity is less than 1, the method does nothing.
-        :param new_capacity: new capacity of the internal hash table
+        :param new_capacityint: new capacity of the internal hash table
         """
         if new_capacity < 1:
 
