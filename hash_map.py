@@ -1,7 +1,17 @@
 # Course: CS261 - Data Structures
 # Assignment: 5.1 hash_map
 # Student: Jeff Stone - 934256195
-# Description:
+# Description: This program implements the HashMap class by implementing the
+# following methods:
+# put()
+# get()
+# remove()
+# contains_key()
+# clear()
+# empty_buckets()
+# resize_table()
+# table_load()
+# get_keys()
 
 
 # Import pre-written DynamicArray and LinkedList classes
